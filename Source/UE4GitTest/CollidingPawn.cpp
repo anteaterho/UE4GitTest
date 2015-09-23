@@ -4,7 +4,6 @@
 #include "CollidingPawn.h"
 #include "CollidingPawnMovementComponent.h"
 
-
 // Sets default values
 ACollidingPawn::ACollidingPawn()
 {
@@ -109,7 +108,7 @@ void ACollidingPawn::MoveRight(float AxisValue)
 
 void ACollidingPawn::Turn(float AxisValue)
 {
-	UE_LOG(LogClass, Warning, TEXT("Turn!!"));
+	//UE_LOG(LogClass, Warning, TEXT("Turn!!"));
 	FRotator NewRotation = GetActorRotation();
 	NewRotation.Yaw += AxisValue;
 	SetActorRotation(NewRotation);
@@ -122,8 +121,5 @@ void ACollidingPawn::ParticleToggle()
 		UE_LOG(LogClass, Warning, TEXT("Particle"));
 		OurParticleSystem->ToggleActive();
 	}
-	else
-	{
-		UE_LOG(LogClass, Warning, TEXT("NoParticle!!"));
-	}
+
 }
