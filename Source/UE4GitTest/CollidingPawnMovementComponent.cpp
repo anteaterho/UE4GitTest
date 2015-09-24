@@ -3,6 +3,7 @@
 #include "UE4GitTest.h"
 #include "CollidingPawnMovementComponent.h"
 
+
 void UCollidingPawnMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -20,10 +21,8 @@ void UCollidingPawnMovementComponent::TickComponent(float DeltaTime, enum ELevel
 
 		if (Hit.IsValidBlockingHit())
 		{
-			SlideAlongSurface(DesireMovementThisFrame, 1.f - Hit.Time, Hit.Normal, Hit);
+			SlideAlongSurface(DesireMovementThisFrame, 1.0f - Hit.Time, Hit.Normal, Hit);
 		}
 	}
 }
-
-
 

@@ -70,8 +70,9 @@ void APawnWithCamera::Tick( float DeltaTime )
 			FVector NewLocation = GetActorLocation();
 			
 			//Print Actor Location.
-			UE_LOG(LogClass, Warning, TEXT("This is a testing statement. %s"), *NewLocation.ToString());
-			
+			UE_LOG(LogClass, Error	, TEXT("This is a testing statement. %s"), *NewLocation.ToString());
+			UE_LOG(LogClass, Warning, TEXT("Delta Time %f"), DeltaTime);
+
 			NewLocation += GetActorForwardVector() * MovementInput.X * DeltaTime;
 			NewLocation += GetActorRightVector() * MovementInput.Y * DeltaTime;
 			this->SetActorLocation(NewLocation);

@@ -26,7 +26,7 @@ public:
 	UParticleSystemComponent* OurParticleSystem;
 
 	class UCollidingPawnMovementComponent* OurMovementComponent;
-	
+
 	virtual UPawnMovementComponent* GetMovementComponent() const override;
 
 
