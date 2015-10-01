@@ -2,6 +2,7 @@
 
 #include "UE4GitTest.h"
 #include "PawnWithCamera.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 APawnWithCamera::APawnWithCamera()
@@ -176,4 +177,24 @@ void APawnWithCamera::Test()
 	FVector End = Loc + (Rot.Vector() * Distance);
 	UE_LOG(LogClass, Error, TEXT("End is %s"), *End.ToString());
 	TempActor->SetActorLocation(End);
+
+	FCollisionQueryParams TraceParam = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
+	TraceParam.bTraceComplex = true;
+	TraceParam.bTraceAsyncScene = true;
+	TraceParam.bReturnPhysicalMaterial = false;
+	TraceParam.AddIgnoredActor(this);
+
+	FHitResult Hit(ForceInit);
+
+	GetWorld()->LineTraceSingle(Hit, Start, End, ECC_Pawn, TraceParam);
+	DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, -1, 0, 12.33f);
+
+	if (Hit.bBlockingHit)
+	{
+		UE_LOG(LogClass, Error, TEXT("Hit Something"));
+	}
+	else
+	{
+		UE_LOG(LogClass, Error, TEXT("No Hit"));
+	}
 }
