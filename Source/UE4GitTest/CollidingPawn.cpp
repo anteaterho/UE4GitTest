@@ -51,18 +51,26 @@ ACollidingPawn::ACollidingPawn()
 	UCameraComponent* Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ActuralCamera"));
 	Camera->AttachTo(SpringArm, USpringArmComponent::SocketName);
 
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	//AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	OurMovementComponent = CreateDefaultSubobject<UCollidingPawnMovementComponent>(TEXT("CustomMovementComponent"));
 	OurMovementComponent->UpdatedComponent = RootComponent;
 
+
+	AActor* ParentActor = this->GetOwner();
 }
 
 // Called when the game starts or when spawned
 void ACollidingPawn::BeginPlay()
 {
+	Count = 0;
 	Super::BeginPlay();
-	
+	//this->Destroy();
+	//Destroy();
+	//this->SetLifeSpan(1);
+	//this->SetActorHiddenInGame(true);
+	//SetActorEnableCollision(false);
+	//this->SetActorTickEnabled(true	);
 }
 
 // Called every frame
@@ -70,6 +78,8 @@ void ACollidingPawn::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+	Count += 1;
+	GLog->Log(FString::FromInt(Count));
 }
 
 // Called to bind functionality to input

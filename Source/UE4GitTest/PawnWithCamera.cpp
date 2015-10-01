@@ -18,6 +18,10 @@ APawnWithCamera::APawnWithCamera()
 	OurCameraSpringArm->CameraLagSpeed = 3.0f;
 	OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("GameCamera"));
 	OurCamera->AttachTo(OurCameraSpringArm, USpringArmComponent::SocketName);
+
+	Count = 0;
+	Distance = 100.0f;
+	
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
@@ -28,7 +32,7 @@ void APawnWithCamera::BeginPlay()
 
 	//Print Actor name.
 	FString MyName = GetName();
-	UE_LOG(LogClass, Warning, TEXT("This is a %s"), *MyName);
+	//UE_LOG(LogClass, Warning, TEXT("This is a %s"), *MyName);
 }
 
 
@@ -36,6 +40,9 @@ void APawnWithCamera::BeginPlay()
 void APawnWithCamera::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+
+	FVector testLoc = GetActorLocation();
+	UE_LOG(LogClass, Warning, TEXT("Test LOC %s"), *testLoc.ToString());	
 
 	if (bZoomingin)
 	{
@@ -70,14 +77,20 @@ void APawnWithCamera::Tick( float DeltaTime )
 			FVector NewLocation = GetActorLocation();
 			
 			//Print Actor Location.
-			UE_LOG(LogClass, Error	, TEXT("This is a testing statement. %s"), *NewLocation.ToString());
-			UE_LOG(LogClass, Warning, TEXT("Delta Time %f"), DeltaTime);
+			//UE_LOG(LogClass, Error	, TEXT("This is a testing statement. %s"), *NewLocation.ToString());
+			//UE_LOG(LogClass, Warning, TEXT("Delta Time %f"), DeltaTime);
 
 			NewLocation += GetActorForwardVector() * MovementInput.X * DeltaTime;
 			NewLocation += GetActorRightVector() * MovementInput.Y * DeltaTime;
 			this->SetActorLocation(NewLocation);
 		}
 	}
+
+	//FHitResult HitCall(ForceInit);
+	//FCollisionQueryParams ParamCall = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
+	//DoTrace(&HitCall, &ParamCall);
+
+	Test();
 }
 
 // Called to bind functionality to input
@@ -125,4 +138,42 @@ void APawnWithCamera::ZoomOut()
 	bZoomingin = false;
 }
 
+bool APawnWithCamera::DoTrace(FHitResult* Hit, FCollisionQueryParams* Params)
+{
 
+	Count += 1;
+	UE_LOG(LogClass, Warning, TEXT("Count : %d"), Count);
+
+	FVector Loc = CameraOne->GetActorLocation();
+	UE_LOG(LogClass, Error, TEXT("Cameera Loc is %S"), *Loc.ToString());
+	FRotator Rot = CameraOne->GetActorRotation();
+	UE_LOG(LogClass, Warning, TEXT("Cameera Rot is %S"), *Rot.ToString());
+
+	/*
+	FVector Loc = GetActorLocation();
+	FRotator Rot = GetActorRotation();
+	*/
+
+	FVector Start = Loc;
+	FVector End = Loc + (Rot.Vector() * 100.0f);
+	UE_LOG(LogClass, Warning, TEXT("Cameera End is %S"), *End.ToString());
+
+	Params->bTraceComplex = true;
+	Params->bTraceAsyncScene = true;
+	Params->bReturnPhysicalMaterial = true;
+	bool Traced = GetWorld()->LineTraceSingle(*Hit, Start, End, ECC_PhysicsBody, *Params);
+	return Traced;
+}
+
+void APawnWithCamera::Test()
+{
+	FVector Loc = CameraOne->GetActorLocation();
+	UE_LOG(LogClass, Error, TEXT("Loc is %s"), *Loc.ToString());
+	FRotator Rot = CameraOne->GetActorRotation();
+	UE_LOG(LogClass, Error, TEXT("Rot is %s"), *Rot.ToString());
+	FVector Start = Loc;
+	UE_LOG(LogClass, Error, TEXT("Start is %s"), *Start.ToString());
+	FVector End = Loc + (Rot.Vector() * Distance);
+	UE_LOG(LogClass, Error, TEXT("End is %s"), *End.ToString());
+	TempActor->SetActorLocation(End);
+}

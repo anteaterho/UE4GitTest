@@ -41,4 +41,18 @@ protected:
 	void ZoomIn();
 	void ZoomOut();
 
+	UPROPERTY(EditAnywhere)
+	ACameraActor* CameraOne;
+
+	UPROPERTY(EditAnywhere)
+	AActor* TempActor;
+
+	UPROPERTY(EditAnywhere)
+	float Distance;
+
+	bool DoTrace(FHitResult* Hit, FCollisionQueryParams* Params);
+
+	int Count;
+
+	void Test();
 };
