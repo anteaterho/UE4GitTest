@@ -3,12 +3,14 @@
 #include "UE4GitTest.h"
 #include "PawnWithCamera.h"
 #include "DrawDebugHelpers.h"
+#include "MyHUD.h"
 
 // Sets default values
 APawnWithCamera::APawnWithCamera()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
@@ -24,6 +26,7 @@ APawnWithCamera::APawnWithCamera()
 	Distance = 100.0f;
 	
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +37,10 @@ void APawnWithCamera::BeginPlay()
 	//Print Actor name.
 	FString MyName = GetName();
 	//UE_LOG(LogClass, Warning, TEXT("This is a %s"), *MyName);
+
+	//Get Controller for show mouse cursor display
+	APlayerController* MyController = GetWorld()->GetFirstPlayerController();
+	MyController->bShowMouseCursor = true;
 }
 
 
@@ -101,6 +108,7 @@ void APawnWithCamera::SetupPlayerInputComponent(class UInputComponent* InputComp
 
 	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &APawnWithCamera::ZoomIn);
 	InputComponent->BindAction("ZoomIn", IE_Released, this, &APawnWithCamera::ZoomOut);
+	InputComponent->BindAction("GetActor", IE_Pressed, this, &APawnWithCamera::LMB_Out);
 
 	InputComponent->BindAxis("MoveForward", this, &APawnWithCamera::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &APawnWithCamera::MoveRight);
@@ -197,4 +205,16 @@ void APawnWithCamera::Test()
 	{
 		UE_LOG(LogClass, Error, TEXT("No Hit"));
 	}
+}
+
+void APawnWithCamera::LMB_Out()
+{
+	APlayerController* MyController = GetWorld()->GetFirstPlayerController();
+	AMyHUD *Hudref = Cast<AMyHUD>(MyController->GetHUD());
+	FVector WorldMousePos = Hudref->GetMOuseWorldPosition();
+
+	FVector Start = GetActorLocation();
+
+	//DrawDebugSphere(GetWorld(), WorldMousePos, 16.f, 8, FColor(83, 155, 83, 255), false, 0.15f);
+	DrawDebugLine(GetWorld(), Start, WorldMousePos, FColor(255, 0, 0), true, 0.5f, 0, 5.0f);
 }

@@ -55,4 +55,6 @@ protected:
 	int Count;
 
 	void Test();
+
+	void LMB_Out();
 };

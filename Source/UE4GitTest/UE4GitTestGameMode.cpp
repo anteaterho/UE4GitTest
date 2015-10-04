@@ -2,6 +2,7 @@
 
 #include "UE4GitTest.h"
 #include "UE4GitTestGameMode.h"
+#include "MyHUD.h"
 #include "UE4GitTestCharacter.h"
 
 AUE4GitTestGameMode::AUE4GitTestGameMode()
@@ -11,5 +12,6 @@ AUE4GitTestGameMode::AUE4GitTestGameMode()
 	if (PlayerPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
+		HUDClass = AMyHUD::StaticClass();
 	}
 }

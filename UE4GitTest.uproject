@@ -12,5 +12,40 @@
 				"Engine"
 			]
 		}
+	],
+	"Plugins": [
+		{
+			"Name": "CodeEditor",
+			"Enabled": true
+		},
+		{
+			"Name": "CodeView",
+			"Enabled": true
+		},
+		{
+			"Name": "BlueprintStats",
+			"Enabled": true
+		},
+		{
+			"Name": "SoundVisualizations",
+			"Enabled": true
+		},
+		{
+			"Name": "AnalyticsBlueprintLibrary",
+			"Enabled": true
+		},
+		{
+			"Name": "ScriptPlugin",
+			"Enabled": true
+		},
+		{
+			"Name": "BlankPlugin",
+			"Enabled": true
+		},
+		{
+			"Name": "Substance",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/offers/2f6439c2f9584f49809d9b13b16c2ba4"
+		}
 	]
 }
