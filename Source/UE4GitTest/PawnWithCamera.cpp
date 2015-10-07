@@ -24,6 +24,8 @@ APawnWithCamera::APawnWithCamera()
 
 	Count = 0;
 	Distance = 100.0f;
+	DistanceWithToPoints = 0.5f;
+	bShowLog = false;
 	
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
@@ -48,6 +50,8 @@ void APawnWithCamera::BeginPlay()
 void APawnWithCamera::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+
+	Count += 1;
 
 	FVector testLoc = GetActorLocation();
 	UE_LOG(LogClass, Warning, TEXT("Test LOC %s"), *testLoc.ToString());	
@@ -98,7 +102,17 @@ void APawnWithCamera::Tick( float DeltaTime )
 	//FCollisionQueryParams ParamCall = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
 	//DoTrace(&HitCall, &ParamCall);
 
-	Test();
+	//DoTrace();
+
+	//Get keyboard input
+	if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustPressed(EKeys::X))
+	{
+		bShowLog = true;
+	}
+	else if (GetWorld()->GetFirstPlayerController()->WasInputKeyJustReleased(EKeys::X))
+	{
+		bShowLog = false;
+	}
 }
 
 // Called to bind functionality to input
@@ -147,34 +161,7 @@ void APawnWithCamera::ZoomOut()
 	bZoomingin = false;
 }
 
-bool APawnWithCamera::DoTrace(FHitResult* Hit, FCollisionQueryParams* Params)
-{
-
-	Count += 1;
-	UE_LOG(LogClass, Warning, TEXT("Count : %d"), Count);
-
-	FVector Loc = CameraOne->GetActorLocation();
-	UE_LOG(LogClass, Error, TEXT("Cameera Loc is %S"), *Loc.ToString());
-	FRotator Rot = CameraOne->GetActorRotation();
-	UE_LOG(LogClass, Warning, TEXT("Cameera Rot is %S"), *Rot.ToString());
-
-	/*
-	FVector Loc = GetActorLocation();
-	FRotator Rot = GetActorRotation();
-	*/
-
-	FVector Start = Loc;
-	FVector End = Loc + (Rot.Vector() * 100.0f);
-	UE_LOG(LogClass, Warning, TEXT("Cameera End is %S"), *End.ToString());
-
-	Params->bTraceComplex = true;
-	Params->bTraceAsyncScene = true;
-	Params->bReturnPhysicalMaterial = true;
-	bool Traced = GetWorld()->LineTraceSingle(*Hit, Start, End, ECC_PhysicsBody, *Params);
-	return Traced;
-}
-
-void APawnWithCamera::Test()
+void APawnWithCamera::DoTrace()
 {
 	FVector Loc = CameraOne->GetActorLocation();
 	UE_LOG(LogClass, Error, TEXT("Loc is %s"), *Loc.ToString());
@@ -214,6 +201,8 @@ void APawnWithCamera::LMB_Out()
 	FVector WorldMousePos = Hudref->GetMOuseWorldPosition();
 
 	FVector Start = GetActorLocation();
+
+	DistanceWithToPoints = FVector::Dist(Start, WorldMousePos);
 
 	//DrawDebugSphere(GetWorld(), WorldMousePos, 16.f, 8, FColor(83, 155, 83, 255), false, 0.15f);
 	DrawDebugLine(GetWorld(), Start, WorldMousePos, FColor(255, 0, 0), true, 0.5f, 0, 5.0f);

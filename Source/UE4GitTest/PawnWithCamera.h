@@ -24,6 +24,16 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
+	bool GetShowLog()
+	{
+		return bShowLog;
+	}
+
+	float GetDistanceWithToPoints()
+	{
+		return DistanceWithToPoints;
+	}
+
 protected:
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* OurCameraSpringArm;
@@ -50,11 +60,16 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float Distance;
 
-	bool DoTrace(FHitResult* Hit, FCollisionQueryParams* Params);
-
 	int Count;
 
-	void Test();
+	void DoTrace();
 
 	void LMB_Out();
+
+private:
+	
+	bool bShowLog;
+
+	float DistanceWithToPoints;
+
 };
